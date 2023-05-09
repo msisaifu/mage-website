@@ -11,8 +11,11 @@
 	export let channel: any = undefined,
 		showEditChannelDrawer: boolean = false,
 		host = {},
-		isHost = false
+		isHost = false,
+		drawerWidth
 	let chatHistory: any[] = []
+
+	let drawerElem: any
 
 	const setRole = (msg: any): any => {
 		if (msg.user?.userId === channel?.user) msg.role = 'Host'
@@ -56,9 +59,20 @@
 	onDestroy(() => {
 		$is_chat_drawer_open = false
 	})
+
+	function select() {
+		if (drawerElem) {
+			let computedStyle = getComputedStyle(drawerElem)
+			drawerWidth = computedStyle.width
+		} else {
+			drawerWidth = '0px'
+		}
+	}
+
+	$: drawerElem, select()
 </script>
 
-<div class="bg-base-100 flex flex-col overflow-y-hidden w-72 md:w-full">
+<div bind:this={drawerElem} class="bg-base-100 flex flex-col overflow-y-hidden w-72 md:w-full">
 	<DropdownViewChannel bind:channel bind:showEditChannelDrawer bind:host bind:isHost />
 	<div class="flex flex-col-reverse p-3 grow overflow-y-scroll w-96">
 		{#each chatHistory as sender}

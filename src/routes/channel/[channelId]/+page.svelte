@@ -36,7 +36,8 @@
 		skip = 0,
 		limit = 10,
 		host = {},
-		isHost = false
+		isHost = false,
+		drawerWidth = '0px'
 
 	$: if (channel) {
 		if (channel._id !== channelId) {
@@ -183,6 +184,10 @@
 				break
 		}
 	})
+
+	$: if ($is_chat_drawer_destroy) {
+		drawerWidth = '0px'
+	}
 </script>
 
 {#if channel && channel._id === channelId}
@@ -199,7 +204,8 @@
 					bind:userCount
 					bind:channels
 					on:loadMore={loadMoreChannels}
-					bind:isHostOrGuest />
+					bind:isHostOrGuest
+					{drawerWidth} />
 
 				{#if showEditChannelDrawer}
 					<DrawerEditChannel bind:channel bind:showDrawer={showEditChannelDrawer} />
@@ -211,7 +217,12 @@
 					class:!hidden={showEditChannelDrawer}>
 					<label for="chat-drawer" class="drawer-overlay" />
 
-					<DrawerChat bind:channel bind:showEditChannelDrawer bind:host bind:isHost />
+					<DrawerChat
+						bind:channel
+						bind:showEditChannelDrawer
+						bind:host
+						bind:isHost
+						bind:drawerWidth />
 				</div>
 			{/if}
 		</div>
